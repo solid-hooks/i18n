@@ -1,0 +1,9 @@
+{
+  "extends": "@subframe7536/type-utils/tsconfig.json",
+  "types": [
+    "vite/client"
+  ],
+  "compilerOptions": {
+    "jsxImportSource": "solid-js"
+  }
+}

@@ -1,0 +1,10 @@
+# auto generate by solid $i18n plugin
+# more config: https://github.com/lokalise/i18n-ally/wiki/Custom-Framework
+languageIds:
+  - javascript
+  - typescript
+  - javascriptreact
+  - typescriptreact
+usageMatchRegex:
+  - '[^\w\d]t\([''"`]({key})[''"`]'
+monopoly: true
