@@ -1,7 +1,7 @@
 {
   "name": "@solid-hooks/i18n",
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "i18n for solid-js",
   "author": "subframe7536",
   "license": "MIT",
