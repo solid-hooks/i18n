@@ -23,7 +23,8 @@ export interface I18nPluginOptions {
 /**
  * create new I18nPlugin
  *
- * here is the config for i18n-ally plugin in VSCode
+ * here is the config for i18n-ally plugin in VSCode:
+ *
  * add `.vscode/i18n-ally-custom-framework.yml`
  *
  * ```yml
@@ -46,7 +47,7 @@ export function I18nPlugin(options: I18nPluginOptions): Plugin {
   let root: string
 
   return {
-    name: 'vite-plugin-solid-i18n',
+    name: 'solid-hooks-i18n',
     configResolved(config) {
       root = config.root
       filter = createFilter(include, exclude, { resolve: root })

@@ -10,7 +10,7 @@ function rangeStringToNumbers(rangeString: string): number[] {
       if (range.includes('-')) {
         const [start, end] = range.split('-').map(n => +n)
         if (!Number.isNaN(start) && !Number.isNaN(end)) {
-          return Array.from({ length: Math.abs(start! - end!) + 1 }, (_, i) => start! + i)
+          return Array.from({ length: Math.abs(start - end) + 1 }, (_, i) => start! + i)
         }
       } else if (!Number.isNaN(+range)) {
         return [+range]
