@@ -150,8 +150,8 @@ export function setupI18n<
     ),
     scopeT: scope => (path, variables?) => translate(
       currentMessage(),
-        `${scope}.${path}` as any,
-        variables as Record<string, any>,
+      (scope + '.' + path) as any,
+      variables as Record<string, any>,
     ),
     n: (num, type, l) => {
       const intl = numberFormatMap.get(l || locale())?.[type]

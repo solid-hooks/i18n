@@ -82,12 +82,12 @@ export function translate<T extends Record<string, any>>(
   const msg = pathGet(message, path as Path<T>)
   return !msg
     ? ''
-    : `${msg}`
-      .replace(varRegex, (_, key) => pathGet(variable, key))
-      .replace(pluralRegex, (originalStr, key, configs) => {
-        const num = +pathGet(variable, key)
-        return Number.isNaN(num)
-          ? originalStr
-          : convertPlural(originalStr, configs, num)
-      })
+    : ('' + msg)
+        .replace(varRegex, (_, key) => pathGet(variable, key))
+        .replace(pluralRegex, (originalStr, key, configs) => {
+          const num = +pathGet(variable, key)
+          return Number.isNaN(num)
+            ? originalStr
+            : convertPlural(originalStr, configs, num)
+        })
 }
