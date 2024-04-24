@@ -1,7 +1,7 @@
 {
   "name": "@solid-hooks/i18n",
   "type": "module",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "i18n for solid-js",
   "author": "subframe7536",
   "license": "MIT",
@@ -59,7 +59,7 @@
   ],
   "scripts": {
     "dev": "vite serve playground",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint . --max-warnings 0 --fix",
     "format": "eslint . --fix",
     "build": "tsup",
     "release": "pnpm lint && pnpm test && pnpm run build && bumpp --all && npm publish",
