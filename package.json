@@ -75,30 +75,21 @@
   "dependencies": {
     "@solid-primitives/event-listener": "^2.3.3",
     "@subframe7536/type-utils": "^0.1.6",
-    "object-path-access": "^3.0.0"
+    "object-path-access": "^4.0.0"
   },
   "devDependencies": {
-    "@subframe7536/eslint-config": "^0.6.0",
-    "@types/node": "^20.12.3",
+    "@subframe7536/eslint-config": "^0.6.1",
+    "@types/node": "^20.12.7",
     "bumpp": "^9.4.0",
     "eslint": "^8.57.0",
     "eslint-plugin-solid": "^0.13.2",
     "jsdom": "^24.0.0",
-    "solid-js": "^1.8.16",
+    "solid-js": "^1.8.17",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.3",
-    "vite": "^5.2.7",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.10",
     "vite-plugin-solid": "^2.10.2",
-    "vitest": "^1.4.0",
+    "vitest": "^1.5.1",
     "yaml": "^2.4.1"
-  },
-  "pnpm": {
-    "overrides": {
-      "array-includes": "npm:@nolyfill/array-includes@latest",
-      "array.prototype.flat": "npm:@nolyfill/array.prototype.flat@latest",
-      "has": "npm:@nolyfill/has@latest",
-      "object.assign": "npm:@nolyfill/object.assign@latest",
-      "object.values": "npm:@nolyfill/object.values@latest"
-    }
   }
 }
