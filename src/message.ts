@@ -23,9 +23,10 @@ export function useStaticMessage<
 >(
   message: Message,
 ): GenerateMessageFn<Locale, Message> {
+  const messages = new Map<string, any>(Object.entries(message))
   return locale => ({
     availableLocales: Object.keys(message) as Locale[],
-    currentMessage: createMemo(() => new Map<string, any>(Object.entries(message)).get(locale())),
+    currentMessage: createMemo(() => messages.get(locale())),
   })
 }
 
@@ -84,6 +85,7 @@ export function useDynamicMessage<Locale extends string>(
     const [currentMessage] = createResource(locale, async (l) => {
       document?.documentElement.setAttribute('lang', l)
       if (!messageMap.has(l)) {
+        DEV && console.log(`unsupported locale: ${l}`)
         throw new Error(`unsupported locale: ${l}`)
       }
       const getMessage = messageMap.get(l)!
