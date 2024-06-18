@@ -5,7 +5,7 @@ import { setupI18n } from '../src/core'
 describe('i18n', () => {
   const en = {
     text: 'text',
-    var: 'welcome {name}, last login: {num}(1=one day|2-4,6=a few days|*=$ days) ago',
+    var: 'welcome {name}, last login: {num}(1=one day|2-4,6=a few days|*=@ days) ago',
     nest: {
       text: 'nest {value}',
     },

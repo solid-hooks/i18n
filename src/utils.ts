@@ -20,11 +20,11 @@ function rangeStringToNumbers(rangeString: string): number[] {
 }
 
 function convertPlural(originalStr: string, configs: string, num: number): string {
-  const ret = (str: string) => str.replace(/\$/g, `${num}`)
+  const ret = (str: string) => str.replace(/@/g, `${num}`)
 
-  // ['1=one test', '2-3=$ tests', '*=$ testss']
+  // ['1=one test', '2-3=@ tests', '*=@ testss']
   for (const config of configs.split('|')) {
-    // ['1', 'one test'] | ['2-3,5', '$ tests'] | ['*', '$ testss']
+    // ['1', 'one test'] | ['2-3,5', '@ tests'] | ['*', '@ testss']
     const [condition, str] = config.split('=').map(s => s.trim())
 
     if (!condition || !str) {
@@ -36,7 +36,7 @@ function convertPlural(originalStr: string, configs: string, num: number): strin
       return ret(str)
     }
 
-    // ['2-3,5', '$ tests']
+    // ['2-3,5', '@ tests']
     if (Number.isNaN(+condition)) {
       // ['2', '3', '5']
       const range = rangeStringToNumbers(condition)
@@ -65,7 +65,7 @@ const pluralRegex = /{([\w\d]+)}\(([^()]+)\)/g
  * @param variable message variables, match `{key}` in message
  * @example
  * translate(
- *   { test: { hello: 'hello {name}, {num}(1=one day|2-3,5=a few days|*=$ days) ago' } },
+ *   { test: { hello: 'hello {name}, {num}(1=one day|2-3,5=a few days|*=@ days) ago' } },
  *   'test.hello',
  *   { name: 'test', num: 2 }
  * )

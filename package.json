@@ -58,7 +58,7 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite serve playground",
+    "dev": "bunx vite serve playground",
     "lint": "eslint . --max-warnings 0 --fix",
     "format": "eslint . --fix",
     "build": "tsup",

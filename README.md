@@ -139,12 +139,12 @@ t('var', { variable: 'text' }) // show text
 
 `{variable}(case=text|case=text)`
 
-- case: support number(seprated by ',') / range(seprated by `-`) / '*'(fallback cases)
-- text: plural text, use `$` to show matched variable
+- case: support number (seprated by `,`) / range (seprated by `-`) / `*` (fallback cases)
+- text: plural text, use `@` to show matched variable
 
 e.g.
 ```ts
-const en = { plural: 'at {var}(1=one day|2-3,5=a few days|*=$ days) ago' } as const
+const en = { plural: 'at {var}(1=one day|2-3,5=a few days|*=@ days) ago' } as const
 t('plural', { var: 1 }) // at one day ago
 t('plural', { var: 2 }) // at a few days ago
 t('plural', { var: 4 }) // at 4 days ago
