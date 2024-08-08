@@ -13,7 +13,7 @@ export type Direction = 'rtl' | 'ltr'
  * see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale MDN}
  * and {@link https://en.wikipedia.org/wiki/Right-to-left wikipedia}
  */
-export function isRTL(locale: string) {
+export function isRTL(locale: string): boolean {
   // If the Intl.Locale API is available, use it to get the script for the locale.
   // This is more accurate than guessing by language, since languages can be written in multiple scripts.
   if (Intl.Locale) {

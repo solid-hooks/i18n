@@ -80,12 +80,16 @@ export function useDynamicMessage<Locale extends string>(
     availableLocales.push(k)
     messageMap.set(k, value as Accessor<Promise<{ default: any }>>)
   }
-  DEV && console.log(`dynamic load locale: [${availableLocales}]`)
+  if (DEV) {
+    console.log(`dynamic load locale: [${availableLocales}]`)
+  }
   return (locale) => {
     const [currentMessage] = createResource(locale, async (l) => {
       document?.documentElement.setAttribute('lang', l)
       if (!messageMap.has(l)) {
-        DEV && console.log(`unsupported locale: ${l}`)
+        if (DEV) {
+          console.warn(`unsupported locale: ${l}`)
+        }
         throw new Error(`unsupported locale: ${l}`)
       }
       const getMessage = messageMap.get(l)!

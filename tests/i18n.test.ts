@@ -1,23 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { useStaticMessage } from '../src'
 import { setupI18n } from '../src/core'
+import { en } from './locale/en'
+import { zh } from './locale/zh'
 
 describe('i18n', () => {
-  const en = {
-    text: 'text',
-    var: 'welcome {name}, last login: {num}(1=one day|2-4,6=a few days|*=@ days) ago',
-    nest: {
-      text: 'nest {value}',
-    },
-    useless: 'useless',
-  } as const
-  const zh = {
-    text: '文本',
-    var: '欢迎 {name}, 上次登录: {num} 天前',
-    nest: {
-      text: '嵌套 {value}',
-    },
-  } as const
   const { availableLocales, setLocale, t, d, n, scopeT } = setupI18n({
     message: useStaticMessage({ en, zh }),
     defaultLocale: 'en',

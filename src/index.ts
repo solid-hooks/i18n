@@ -8,7 +8,5 @@ export type {
   GenerateMessageFn,
 } from './types'
 
-export { useDynamicMessage, useStaticMessage } from './message'
-
-export { getReadingDirection, isRTL } from './dir'
-export type { Direction } from './dir'
+export * from './message'
+export * from './dir'

@@ -1,4 +1,4 @@
-import { DEV, Suspense, createComponent, createContext, createSignal, useContext } from 'solid-js'
+import { DEV, type JSXElement, Suspense, createComponent, createContext, createSignal, useContext } from 'solid-js'
 import { makeEventListener } from '@solid-primitives/event-listener'
 import type {
   DateTimeFormatItem,
@@ -55,7 +55,7 @@ export function defineI18n<
   return {
     I18nProvider: (props) => {
       const { suspense, ...data } = setupI18n(options)
-      function createPropvider() {
+      function createPropvider(): JSXElement {
         return createComponent(ctx.Provider, {
           value: data,
           get children() {
@@ -137,9 +137,11 @@ export function setupI18n<
     numberFormatMap.set(l, obj)
   }
 
-  listenEvent && makeEventListener(window, 'languagechange', () => {
-    setLocale(navigator.language as any)
-  })
+  if (listenEvent) {
+    makeEventListener(window, 'languagechange', () => {
+      setLocale(navigator.language as any)
+    })
+  }
 
   return {
     suspense,

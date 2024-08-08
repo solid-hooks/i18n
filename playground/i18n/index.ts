@@ -1,8 +1,9 @@
 import { defineI18n, useDynamicMessage } from '../../src/index'
+import type { Message } from './type'
 
 export const { useI18n, I18nProvider } = defineI18n({
   message: useDynamicMessage(
-    import.meta.glob('./locales/*.yml'),
+    import.meta.glob('./locales/*.yml') as Message,
     path => path.slice(10, -4),
   ),
   datetimeFormats: {

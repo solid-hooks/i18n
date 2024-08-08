@@ -5,4 +5,10 @@ export default defineEslintConfig({
     'yaml/plain-scalar': 'off',
     'prefer-template': 'off',
   },
+  ignoreAll: ['./playground/index.html'],
+}).append({
+  files: ['README.md/*.{ts,tsx}', 'playground/**.*'],
+  rules: {
+    'ts/explicit-function-return-type': 'off',
+  },
 })

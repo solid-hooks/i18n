@@ -20,7 +20,7 @@ function rangeStringToNumbers(rangeString: string): number[] {
 }
 
 function convertPlural(originalStr: string, configs: string, num: number): string {
-  const ret = (str: string) => str.replace(/@/g, `${num}`)
+  const ret = (str: string): string => str.replace(/@/g, `${num}`)
 
   // ['1=one test', '2-3=@ tests', '*=@ testss']
   for (const config of configs.split('|')) {
@@ -55,7 +55,7 @@ function convertPlural(originalStr: string, configs: string, num: number): strin
 
 // {name}
 const varRegex = /\{([^{}]+)\}(?!\()/g
-// {num}(1=one test|2-3,5=$ tests|*=$ testss)
+// {num}(1=one test|2-3,5=@ tests|*=@ testss)
 const pluralRegex = /\{(\w+)\}\(([^()]+)\)/g
 
 /**

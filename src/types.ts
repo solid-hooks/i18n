@@ -52,7 +52,7 @@ export type I18nOptions<
    * ```
    * useStaticMessage({
    *   en: {
-   *     hello: 'hello {name}, {num}(1=one day|2-3,5=a few days|*=$ days) ago'
+   *     hello: 'hello {name}, {num}(1=one day|2-3,5=a few days|*=@ days) ago'
    *   }
    * })
    * ```
@@ -181,7 +181,7 @@ export type ScopeMessage<
   Locale extends string,
   Message extends Record<string, any>,
   Scope extends string,
-> = Message extends Function
+> = Message extends AnyFunction
   ? Record<string, Record<string, any>>
   : Record<Locale, PathValue<Message[Locale], Scope>>
 
