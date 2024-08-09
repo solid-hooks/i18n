@@ -115,27 +115,9 @@ export function setupI18n<
   const datetimeFormatMap = new Map<string, Record<string, DateTimeFormatItem>>()
   const numberFormatMap = new Map<string, Record<string, NumberFormatItem>>()
 
-  // setup datetime formatters
-  for (const [l, datetimeFormat] of Object.entries(datetimeFormats || {})) {
-    const obj = {} as Record<string, DateTimeFormatItem>
-    for (const [key, config] of Object.entries(datetimeFormat || {})) {
-      obj[key] = typeof config === 'function'
-        ? config
-        : new Intl.DateTimeFormat(l, config)
-    }
-    datetimeFormatMap.set(l, obj)
-  }
-
-  // setup number formatters
-  for (const [l, numberFormat] of Object.entries(numberFormats || {})) {
-    const obj = {} as Record<string, NumberFormatItem>
-    for (const [key, config] of Object.entries(numberFormat || {})) {
-      obj[key] = typeof config === 'function'
-        ? config
-        : new Intl.NumberFormat(l, config)
-    }
-    numberFormatMap.set(l, obj)
-  }
+  // setup datetime formatters and number formatters
+  setupFormat(datetimeFormatMap, (l, c) => new Intl.DateTimeFormat(l, c), datetimeFormats)
+  setupFormat(numberFormatMap, (l, c) => new Intl.NumberFormat(l, c), numberFormats)
 
   if (listenEvent) {
     makeEventListener(window, 'languagechange', () => {
@@ -151,24 +133,37 @@ export function setupI18n<
       variables as Record<string, any>,
     ),
     scopeT: scope => (path, variables?) => translate(
-      currentMessage(),
-      (scope + '.' + path) as any,
+      currentMessage(scope),
+      path as any,
       variables as Record<string, any>,
     ),
-    n: (num, type, l) => {
-      const intl = numberFormatMap.get(l || locale())?.[type]
-      return typeof intl === 'function'
-        ? intl(num)
-        : intl?.format(num) || num.toLocaleString(locale())
-    },
-    d: (date, type, l) => {
-      const intl = datetimeFormatMap.get(l || locale())?.[type]
-      return typeof intl === 'function'
-        ? intl(date)
-        : intl?.format(date) || date.toLocaleString(locale())
-    },
+    n: (num, type, l) => getFormatedData(num, numberFormatMap, type, l || locale()),
+    d: (date, type, l) => getFormatedData(date, datetimeFormatMap, type, l || locale()),
     locale,
     setLocale,
     availableLocales,
   }
+}
+
+function setupFormat(
+  map: Map<string, any>,
+  setup: (locale: string, config: any) => any,
+  formats: Record<string, any> = {},
+): void {
+  for (const [l, format = {}] of Object.entries(formats)) {
+    const obj = {} as Record<string, any>
+    for (const [key, config] of Object.entries(format)) {
+      obj[key] = typeof config === 'function'
+        ? config
+        : setup(l, config)
+    }
+    map.set(l, obj)
+  }
+}
+
+function getFormatedData(data: any, map: Map<string, any>, type: string, locale: string): any {
+  const intl = map.get(locale)?.[type]
+  return typeof intl === 'function'
+    ? intl(data)
+    : intl?.format(data) || data.toLocaleString(locale)
 }

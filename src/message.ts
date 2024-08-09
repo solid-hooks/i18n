@@ -1,5 +1,6 @@
 import type { Accessor } from 'solid-js'
-import { DEV, createMemo, createResource } from 'solid-js'
+import { DEV, createMemo, createResource, createSignal } from 'solid-js'
+import { pathGet, pathSet } from 'object-path-access'
 import type { DynamicMessage, GenerateMessageFn } from './types'
 
 /**
@@ -23,11 +24,24 @@ export function useStaticMessage<
 >(
   message: Message,
 ): GenerateMessageFn<Locale, Message> {
-  const messages = new Map<string, any>(Object.entries(message))
-  return locale => ({
-    availableLocales: Object.keys(message) as Locale[],
-    currentMessage: createMemo(() => messages.get(locale())),
-  })
+  const messageMap = new Map<string, any>(Object.entries(message))
+  return (locale) => {
+    const message = createMemo(() => {
+      const l = locale()
+      document?.documentElement.setAttribute('lang', l)
+      if (!messageMap.has(l)) {
+        if (DEV) {
+          console.warn(`unsupported locale: ${l}`)
+        }
+        throw new Error(`unsupported locale: ${l}`)
+      }
+      return messageMap.get(l)
+    })
+    return {
+      availableLocales: Object.keys(message) as Locale[],
+      currentMessage: scope => scope ? pathGet(message(), scope) : message(),
+    }
+  }
 }
 
 /**
@@ -69,10 +83,10 @@ export function useStaticMessage<
  * })
  * ```
  */
-export function useDynamicMessage<Locale extends string>(
-  imports: DynamicMessage,
+export function useDynamicMessage<Locale extends string, Message extends DynamicMessage>(
+  imports: Message,
   parseKey: (key: string) => string,
-): GenerateMessageFn<Locale, DynamicMessage> {
+): GenerateMessageFn<Locale, Message> {
   const messageMap = new Map<string, Accessor<Promise<{ default: any }>>>()
   const availableLocales: Locale[] = []
   for (const [key, value] of Object.entries(imports)) {
@@ -84,7 +98,7 @@ export function useDynamicMessage<Locale extends string>(
     console.log(`dynamic load locale: [${availableLocales}]`)
   }
   return (locale) => {
-    const [currentMessage] = createResource(locale, async (l) => {
+    const [message] = createResource(locale, async (l) => {
       document?.documentElement.setAttribute('lang', l)
       if (!messageMap.has(l)) {
         if (DEV) {
@@ -96,7 +110,63 @@ export function useDynamicMessage<Locale extends string>(
       return (await getMessage()).default
     })
     return {
-      currentMessage,
+      currentMessage: scope => scope ? pathGet(message(), scope) : message(),
+      availableLocales,
+      suspense: true,
+    }
+  }
+}
+
+export function useDynamicNamesapceMessage<Locale extends string>(
+  imports: DynamicMessage,
+  parseKey: (key: string) => [locale: string, ns?: string],
+): GenerateMessageFn<Locale, DynamicMessage> {
+  const messageMap = new Map<string, Map<string, Accessor<Promise<{ default: any }>>>>()
+  const availableLocales: Locale[] = []
+  for (const [key, value] of Object.entries(imports)) {
+    const [k, ns = ''] = parseKey(key)
+    availableLocales.push(k as Locale)
+    if (!messageMap.has(k)) {
+      messageMap.set(k, new Map())
+    }
+    messageMap.get(k)!.set(ns, value as Accessor<Promise<{ default: any }>>)
+  }
+  if (DEV) {
+    console.log(`dynamic load locale: [${availableLocales}]`)
+  }
+  return (locale) => {
+    const [ns, setNs] = createSignal('')
+    let cache: Record<string, any> = {}
+    const message = createMemo(() => {
+      const l = locale()
+      document?.documentElement.setAttribute('lang', l)
+      if (!messageMap.has(l)) {
+        if (DEV) {
+          console.warn(`unsupported locale: ${l}`)
+        }
+        throw new Error(`unsupported locale: ${l}`)
+      }
+      return messageMap.get(l)!
+    })
+    const [currentMessage] = createResource(ns, async (nspace) => {
+      if (!cache[nspace]) {
+        const msg = message()
+        for (const key of msg.keys()) {
+          if (nspace.startsWith(key) || key === nspace) {
+            pathSet(cache, key as any, (await msg.get(key)!()).default)
+            break
+          } else if (key.startsWith(nspace)) {
+            pathSet(cache, key as any, (await msg.get(key)!()).default)
+          }
+        }
+      }
+      return pathGet(cache, nspace as any)
+    })
+    return {
+      currentMessage: (scope = '') => {
+        setNs(scope)
+        return currentMessage()
+      },
       availableLocales,
       suspense: true,
     }
