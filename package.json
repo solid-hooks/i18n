@@ -1,7 +1,7 @@
 {
   "name": "@solid-hooks/i18n",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "i18n for solid-js",
   "author": "subframe7536",
   "license": "MIT",
@@ -61,7 +61,6 @@
   "dependencies": {
     "@solid-primitives/event-listener": "^2.3.3",
     "@subframe7536/type-utils": "^0.1.6",
-    "local-pkg": "^0.5.0",
     "object-path-access": "^4.0.0"
   },
   "devDependencies": {
@@ -71,10 +70,10 @@
     "eslint": "^9.8.0",
     "eslint-plugin-solid": "^0.14.1",
     "jsdom": "^24.1.1",
-    "solid-js": "^1.8.19",
+    "solid-js": "^1.8.20",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
-    "vite": "^5.3.5",
+    "vite": "^5.4.0",
     "vite-plugin-solid": "^2.10.2",
     "vitest": "^2.0.5",
     "yaml": "^2.5.0"

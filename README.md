@@ -108,7 +108,7 @@ return (
 
 To convert `yml` or other formats of message, setup built-in vite plugin
 
-You can get variable type check support by `withTypeSupport`. It will generate compact types to `output` file
+From v0.2.1, you can get variable type check support by `withTypeSupport`. It will generate compact types to `output` file
 
 vite.config.ts
 ```ts

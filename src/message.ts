@@ -38,7 +38,7 @@ export function useStaticMessage<
       return messageMap.get(l)
     })
     return {
-      availableLocales: Object.keys(message) as Locale[],
+      availableLocales: Array.from(messageMap.keys()) as Locale[],
       currentMessage: scope => scope ? pathGet(message(), scope) : message(),
     }
   }
