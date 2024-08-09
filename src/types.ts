@@ -27,7 +27,7 @@ export type GenerateMessageFn<
   Locale extends string,
   Message extends MessageType<Locale>,
 > = (locale: Accessor<Locale>) => {
-  currentMessage: Accessor<Message[keyof Message] | undefined>
+  currentMessage: (scope?: string) => Message[keyof Message] | undefined
   availableLocales: Locale[]
   /**
    * whether to enable suspense
@@ -38,12 +38,12 @@ export type GenerateMessageFn<
 /**
  * options for {@link $i18n}
  */
-export type I18nOptions<
+export interface I18nOptions<
   Locale extends string = string,
   Message extends MessageType<Locale> = any,
   NumberKey extends string = string,
   DatetimeKey extends string = string,
-> = {
+> {
   /**
    * function that load messages
    *
@@ -110,15 +110,15 @@ export type I18nOptions<
    */
   listenEvent?: boolean
 }
-
+type Unwrap<T> = T extends () => Promise<infer P> ? P : T
 export type TranslateFn<
   Locale extends string,
   Message extends MessageType<Locale>,
-> = <P extends string = Path<Message[Locale]>>(
+> = <P extends string = Path<Unwrap<Message[Locale]>>>(
   path: StringFallback<P>,
-  ...args: keyof ParseMessage<PathValue<Message[Locale], P>> extends never
+  ...args: keyof ParseMessage<PathValue<Unwrap<Message[Locale]>, P>> extends never
     ? [variables?: Record<string, string | number>]
-    : [variables: ParseMessage<PathValue<Message[Locale], P>>]
+    : [variables: ParseMessage<PathValue<Unwrap<Message[Locale]>, P>>]
 ) => string
 
 /**

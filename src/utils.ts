@@ -54,15 +54,16 @@ function convertPlural(originalStr: string, configs: string, num: number): strin
 }
 
 // {name}
-const varRegex = /\{([^{}]+)\}(?!\()/g
+export const varRegex = /\{([^{}]+)\}(?!\()/g
 // {num}(1=one test|2-3,5=@ tests|*=@ testss)
-const pluralRegex = /\{(\w+)\}\(([^()]+)\)/g
+export const pluralRegex = /\{(\w+)\}\(([^()]+)\)/g
 
 /**
  * display message, support plural
  * @param message message object
  * @param path object path, support nest and []
  * @param variable message variables, match `{key}` in message
+ * @param fallback fallback string
  * @example
  * translate(
  *   { test: { hello: 'hello {name}, {num}(1=one day|2-3,5=a few days|*=@ days) ago' } },
@@ -75,9 +76,10 @@ export function translate<T extends Record<string, any>>(
   message: T | undefined,
   path: StringFallback<Path<T>>,
   variable?: Record<string, string | number>,
+  fallback?: string,
 ): string {
   if (!message) {
-    return ''
+    return fallback || ''
   }
   const msg = pathGet(message, path as Path<T>)
   return !msg

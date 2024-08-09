@@ -4,7 +4,7 @@
 
 # @solid-hooks/i18n
 
-i18n for solid.js
+I18n for solid.js
 
 ## Install
 
@@ -20,7 +20,7 @@ pnpm add @solid-hooks/i18n
 
 ## Usage
 
-### Static message
+### Static Message
 
 ```tsx
 import { For } from 'solid-js'
@@ -81,16 +81,17 @@ return (
 )
 ```
 
-### Dynamic message
+### Dynamic Message
 
-use [`import.meta.glob`](https://vitejs.dev/guide/features.html#glob-import) to dynamically load message
+Use [`import.meta.glob`](https://vitejs.dev/guide/features.html#glob-import) to dynamically load message
 
 ```tsx
 import { defineI18n, useDynamicMessage } from '@solid-hooks/i18n'
+import { MSG } from './type'
 
 export const { useI18n, I18nProvider } = defineI18n({
   message: useDynamicMessage(
-    import.meta.glob('./locales/*.yml'),
+    import.meta.glob('./locales/*.yml') as MSG,
     path => path.slice(10, -4)
   ),
   // other options...
@@ -103,21 +104,27 @@ return (
 )
 ```
 
-#### Vite plugin
+#### Vite Plugin
 
-to convert `yml` or other formats of message, setup built-in vite plugin
+To convert `yml` or other formats of message, setup built-in vite plugin
+
+You can get variable type check support by `withTypeSupport`. It will generate compact types to `output` file
 
 vite.config.ts
 ```ts
 import { defineConfig } from 'vite'
 import { parse } from 'yaml'
-import { I18nPlugin } from '@solid-hooks/i18n/vite'
+import { I18nPlugin, withTypeSupport } from '@solid-hooks/i18n/vite'
 
 export default defineConfig({
   plugins: [
     I18nPlugin({
       include: './src/i18n/locales/*.yml',
-      transformMessage: content => parse(content),
+      transformMessage: withTypeSupport({
+        baseTranslationFilePath: './i18n/locales/en.yml',
+        transform: content => parse(content),
+        output: './i18n/type.ts',
+      }),
     }),
   ],
 })
@@ -169,7 +176,7 @@ monopoly: true
 
 ## RTL
 
-credit to `React-spectrum`
+Credit to `react-spectrum`
 
 ```ts
 import { getReadingDirection, isRTL } from '@solid-hooks/i18n'
