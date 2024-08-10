@@ -20,11 +20,13 @@ export interface I18nPluginOptions {
   /**
    * Raw message transform functions
    * @param content matched message file content
-   * @param id matched message file path
+   * @param id matched message file path. If trigger on watching value is {@link WATCH_ID}
    * @param root project root
    */
   transformMessage: (content: string, id: string, root: string) => any
 }
+
+export const WATCH_ID = '__i18n_watch__'
 
 /**
  * create new I18nPlugin
@@ -80,6 +82,13 @@ export function I18nPlugin(options: I18nPluginOptions): Plugin {
       filter = createFilter(include, exclude, { resolve: root })
       logger.info(`read messages from "${root}"`, { timestamp: true })
     },
+    configureServer(server) {
+      server.watcher.on('change', (path) => {
+        if (filter(path)) {
+          transformMessage(readFileSync(path, 'utf-8'), WATCH_ID, root)
+        }
+      })
+    },
     transform(code, id) {
       if (filter(id)) {
         const msg = transformMessage(code, id, root)
@@ -116,9 +125,11 @@ export function withTypeSupport(options: WithTypeSupportOptions): I18nPluginOpti
   let rootPath: string
   const parsePath = (p: string): string => normalizePath(isAbsolute(p) ? p : join(rootPath, p))
 
-  return (code, _id, root) => {
-    if (!rootPath) {
-      rootPath = root
+  return (code, id, root) => {
+    if (id === WATCH_ID || !rootPath) {
+      if (!rootPath) {
+        rootPath = root
+      }
       const trans = readFileSync(parsePath(baseTranslationFilePath), 'utf-8')
       const outputPath = parsePath(output || join(dirname(baseTranslationFilePath), 'type.ts'))
       generateType(transform(trans), outputPath)
