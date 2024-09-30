@@ -1,5 +1,5 @@
-import type { Path, PathValue } from 'object-path-access'
 import type { AnyFunction, Prettify, StringKeys } from '@subframe7536/type-utils'
+import type { Path, PathValue } from 'object-path-access'
 import type { Accessor, FlowComponent, JSXElement, Setter } from 'solid-js'
 
 export type StringFallback<T, F = string> = T extends never ? F : T extends '' ? F : T
@@ -124,12 +124,12 @@ export type TranslateFn<
 /**
  * type of {@link $i18n}
  */
-export type I18nObject<
+export interface I18nObject<
   Locale extends string = string,
   Message extends MessageType<Locale> = MessageType<Locale>,
   NumberKey extends string = string,
   DatetimeKey extends string = string,
-> = {
+> {
   /**
    * display message, support plural
    * @param path object path
@@ -185,12 +185,12 @@ export type ScopeMessage<
   ? Record<string, Record<string, any>>
   : Record<Locale, PathValue<Message[Locale], Scope>>
 
-export type I18nObjectContext<
+export interface I18nObjectContext<
   Locale extends string = string,
   Message extends MessageType<Locale> = MessageType<Locale>,
   NumberKey extends string = string,
   DatetimeKey extends string = string,
-> = {
+> {
   /**
    * i18n provider
    */

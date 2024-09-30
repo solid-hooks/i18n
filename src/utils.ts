@@ -1,6 +1,6 @@
 import type { Path } from 'object-path-access'
-import { pathGet } from 'object-path-access'
 import type { StringFallback } from './types'
+import { pathGet } from 'object-path-access'
 
 // '2-3,5' => [2, 3, 5]
 function rangeStringToNumbers(rangeString: string): number[] {

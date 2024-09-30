@@ -1,12 +1,12 @@
 export { defineI18n } from './core'
 
-export type {
-  I18nOptions,
-  I18nObject,
-  NumberFormats,
-  DateTimeFormats,
-  GenerateMessageFn,
-} from './types'
+export * from './dir'
 
 export * from './message'
-export * from './dir'
+export type {
+  DateTimeFormats,
+  GenerateMessageFn,
+  I18nObject,
+  I18nOptions,
+  NumberFormats,
+} from './types'

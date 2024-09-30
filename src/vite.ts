@@ -1,8 +1,8 @@
-import { readFileSync, writeFileSync } from 'node:fs'
-import { relative } from 'node:path/posix'
-import { dirname, isAbsolute, join } from 'node:path'
-import { createFilter, createLogger, normalizePath } from 'vite'
 import type { FilterPattern, Plugin } from 'vite'
+import { readFileSync, writeFileSync } from 'node:fs'
+import { dirname, isAbsolute, join } from 'node:path'
+import { relative } from 'node:path/posix'
+import { createFilter, createLogger, normalizePath } from 'vite'
 import { pluralRegex, varRegex } from './utils'
 
 const logger = createLogger('info', { prefix: '[i18n]' })

@@ -23,8 +23,8 @@ pnpm add @solid-hooks/i18n
 ### Static Message
 
 ```tsx
-import { For } from 'solid-js'
 import { defineI18n, useStaticMessage } from '@solid-hooks/i18n'
+import { For } from 'solid-js'
 
 // use `as const` to make parameters typesafe
 const en = { t: '2', deep: { data: 'Hello, {name}' }, plural: '{day}(0=zero|1=one)' } as const
@@ -112,9 +112,9 @@ From v0.2.1, you can get variable type check support by `withTypeSupport`. It wi
 
 vite.config.ts
 ```ts
+import { I18nPlugin, withTypeSupport } from '@solid-hooks/i18n/vite'
 import { defineConfig } from 'vite'
 import { parse } from 'yaml'
-import { I18nPlugin, withTypeSupport } from '@solid-hooks/i18n/vite'
 
 export default defineConfig({
   plugins: [

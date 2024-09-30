@@ -1,4 +1,4 @@
-import { For, createSignal } from 'solid-js'
+import { createSignal, For } from 'solid-js'
 import { useI18n } from './i18n'
 
 export default function Component() {

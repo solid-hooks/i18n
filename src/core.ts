@@ -1,5 +1,3 @@
-import { DEV, type JSXElement, Suspense, createComponent, createContext, createSignal, useContext } from 'solid-js'
-import { makeEventListener } from '@solid-primitives/event-listener'
 import type {
   DateTimeFormatItem,
   I18nObject,
@@ -8,6 +6,8 @@ import type {
   MessageType,
   NumberFormatItem,
 } from './types'
+import { makeEventListener } from '@solid-primitives/event-listener'
+import { createComponent, createContext, createSignal, DEV, type JSXElement, Suspense, useContext } from 'solid-js'
 import { translate } from './utils'
 
 /**

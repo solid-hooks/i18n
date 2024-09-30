@@ -1,5 +1,5 @@
-import { defineI18n, useDynamicMessage } from '../../src/index'
 import type { MSG } from './type'
+import { defineI18n, useDynamicMessage } from '../../src/index'
 
 export const { useI18n, I18nProvider } = defineI18n({
   message: useDynamicMessage(

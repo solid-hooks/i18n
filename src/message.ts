@@ -1,7 +1,7 @@
 import type { Accessor } from 'solid-js'
-import { DEV, createMemo, createResource, createSignal } from 'solid-js'
-import { pathGet, pathSet } from 'object-path-access'
 import type { DynamicMessage, GenerateMessageFn } from './types'
+import { pathGet, pathSet } from 'object-path-access'
+import { createMemo, createResource, createSignal, DEV } from 'solid-js'
 
 /**
  * load static message
