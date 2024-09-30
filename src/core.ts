@@ -76,7 +76,7 @@ export function defineI18n<
       ? () => {
           const _ = useContext(ctx)
           if (!_) {
-            throw new Error('no <I18nProvider /> wrapped!')
+            throw new Error('<I18nProvider /> does not exists in component tree')
           }
           return _
         }
