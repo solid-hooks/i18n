@@ -1,7 +1,7 @@
 {
   "extends": "@subframe7536/type-utils/tsconfig.json",
   "compilerOptions": {
-    "jsxImportSource": "solid-js",
+    "moduleResolution": "node10",
     "types": [
       "vite/client"
     ]

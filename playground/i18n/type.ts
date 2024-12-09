@@ -9,6 +9,8 @@ export type MSG = ParseMessage<{
   "test": string,
   "asd": string,
   "plural": "{name}_{num}()",
+  "test2": string,
+  "test3": string,
   "nest": {
     "description": string,
     "variable": "{variable}"

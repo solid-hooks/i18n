@@ -4,3 +4,4 @@ plural: '欢迎 {name}，上次登陆: {num}(0=今天|*=@ 天前)'
 nest:
   description: '嵌套测试'
   variable: '变量测试 {variable}'
+  test: '测试'

@@ -20,7 +20,7 @@ export interface I18nPluginOptions {
   /**
    * Raw message transform functions
    * @param content matched message file content
-   * @param id matched message file path. If trigger on watching value is {@link WATCH_ID}
+   * @param id matched message file  If trigger on watching value is {@link WATCH_ID}
    * @param root project root
    */
   transformMessage: (content: string, id: string, root: string) => any
@@ -101,7 +101,7 @@ export function I18nPlugin(options: I18nPluginOptions): Plugin {
 
 interface WithTypeSupportOptions {
   /**
-   * Base translation file path. Use this file to generate type
+   * Base translation file  Use this file to generate type
    */
   baseTranslationFilePath: string
   /**
@@ -113,6 +113,11 @@ interface WithTypeSupportOptions {
    * Custom output file path, default `join(dirname(id), 'type.ts')`
    */
   output?: string
+  /**
+   * Whether to check translation keys
+   * @default true
+   */
+  checkTranslationKeys?: boolean
 }
 
 /**
@@ -121,21 +126,40 @@ interface WithTypeSupportOptions {
  * Parse translation file to json, convert to type and write to file path
  */
 export function withTypeSupport(options: WithTypeSupportOptions): I18nPluginOptions['transformMessage'] {
-  const { baseTranslationFilePath, transform = JSON.parse, output } = options
+  const { baseTranslationFilePath, transform = JSON.parse, output, checkTranslationKeys = true } = options
   let rootPath: string
   const parsePath = (p: string): string => normalizePath(isAbsolute(p) ? p : join(rootPath, p))
 
   return (code, id, root) => {
-    if (id === WATCH_ID || !rootPath) {
-      if (!rootPath) {
-        rootPath = root
-      }
-      const trans = readFileSync(parsePath(baseTranslationFilePath), 'utf-8')
+    if (!rootPath) {
+      rootPath = root
+    }
+    const translationObject = transform(readFileSync(parsePath(baseTranslationFilePath), 'utf-8'))
+    if (id === WATCH_ID) {
       const outputPath = parsePath(output || join(dirname(baseTranslationFilePath), 'type.ts'))
-      generateType(transform(trans), outputPath)
+      generateType(translationObject, outputPath)
       logger.info(`generate type to "${relative(root, outputPath)}"`, { timestamp: true })
     }
-    return transform(code)
+    const result = transform(code)
+    if (checkTranslationKeys) {
+      const [missingKeys, extraKeys] = getMissingTranslationKey(
+        flattenNestObjectKeys(translationObject),
+        flattenNestObjectKeys(result),
+      )
+      const hasMissingKeys = missingKeys.length > 0
+      const hasExtraKeys = extraKeys.length > 0
+      if (hasMissingKeys || hasExtraKeys) {
+        let msg = ''
+        if (hasMissingKeys) {
+          msg += stringifyKeys(missingKeys, '-')
+        }
+        if (hasExtraKeys) {
+          msg += stringifyKeys(extraKeys, '+')
+        }
+        logger.warn(`Translation key issue in ${relative(root, id)}:${msg}`, { timestamp: true })
+      }
+    }
+    return result
   }
 }
 
@@ -178,4 +202,40 @@ type ParseMessage<T> = {
 export type MSG = ParseMessage<${type}>
 `,
   )
+}
+
+function getMissingTranslationKey(baseKeys: string[], keys: string[]): [missingKeys: string[], extraKeys: string[]] {
+  const missingKeys = baseKeys.filter(key => !keys.includes(key))
+  const extraKeys = keys.filter(key => !baseKeys.includes(key))
+
+  return [missingKeys, extraKeys]
+}
+
+function flattenNestObjectKeys(obj: object): string[] {
+  const result: string[] = []
+  const queue: Array<[any, string]> = [[obj, '']]
+
+  while (queue.length > 0) {
+    const [current, path] = queue.shift()!
+
+    if (typeof current !== 'object' || current === null) {
+      continue
+    }
+
+    for (const key of Object.keys(current)) {
+      const newPath = path ? `${path}.${key}` : key
+      result.push(newPath)
+
+      if (typeof current[key] === 'object' && current[key] !== null) {
+        queue.push([current[key], newPath])
+      }
+    }
+  }
+
+  return result
+}
+
+function stringifyKeys(arr: string[], heading: string): string {
+  const base = `\n                ${heading} `
+  return base + arr.join(base)
 }

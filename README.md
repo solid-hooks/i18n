@@ -130,6 +130,16 @@ export default defineConfig({
 })
 ```
 
+From 0.2.4, the plugin will report translation key issue automatically. You can suppress the report by setting the `checkTranslationKeys` option to `false`
+
+```
+15:46:20 [i18n] Translation key issue in i18n/locales/zh-CN.yml:
+                - test2
+                - test3
+                + nest.test
+15:46:20 [i18n] transform message in "i18n/locales/zh-CN.yml"
+```
+
 ### Syntax
 
 #### Variable

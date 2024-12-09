@@ -1,6 +1,8 @@
 test: 'test'
 asd: 'asd'
 plural: 'welcome {name}, last login: {num}(0=today|1=one day ago|2-3,5=a few days ago|*=@ days ago)'
+test2: 'test2'
+test3: 'test3'
 nest:
   description: 'nest props'
   variable: 'variable test {variable}'
