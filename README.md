@@ -130,7 +130,9 @@ export default defineConfig({
 })
 ```
 
-From 0.2.4, the plugin will report translation key issue automatically. You can suppress the report by setting the `checkTranslationKeys` option to `false`
+##### Report Translation Key Issue
+
+From 0.2.4, the vite plugin will report translation key issue automatically when using `withTypeSupport`.
 
 ```
 15:46:20 [i18n] Translation key issue in i18n/locales/zh-CN.yml:
@@ -138,6 +140,15 @@ From 0.2.4, the plugin will report translation key issue automatically. You can 
                 - test3
                 + nest.test
 15:46:20 [i18n] transform message in "i18n/locales/zh-CN.yml"
+```
+
+You can suppress the report by setting the `checkTranslationKeys` option to `false`
+
+```ts
+withTypeSupport({
+  /* ...options */
+  checkTranslationKeys: false
+})
 ```
 
 ### Syntax
