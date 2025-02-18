@@ -66,11 +66,11 @@ export function defineI18n<
       return (props.useSuspense === false || !suspense)
         ? createPropvider()
         : createComponent(Suspense, {
-          fallback: props.useSuspense === true ? undefined : props.useSuspense,
-          get children() {
-            return createPropvider()
-          },
-        })
+            fallback: props.useSuspense === true ? undefined : props.useSuspense,
+            get children() {
+              return createPropvider()
+            },
+          })
     },
     useI18n: DEV
       ? () => {
