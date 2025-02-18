@@ -2,24 +2,34 @@ import type { Path } from 'object-path-access'
 import type { StringFallback } from './types'
 import { pathGet } from 'object-path-access'
 
-// '2-3,5' => [2, 3, 5]
-function rangeStringToNumbers(rangeString: string): number[] {
-  return rangeString
-    .split(',')
-    .flatMap((range) => {
-      if (range.includes('-')) {
-        const [start, end] = range.split('-').map(n => +n)
-        if (!Number.isNaN(start) && !Number.isNaN(end)) {
-          return Array.from({ length: Math.abs(start - end) + 1 }, (_, i) => start! + i)
-        }
-      } else if (!Number.isNaN(+range)) {
-        return [+range]
+/**
+ * Convert `'2-3,5'` to `[2, 3, 5]`
+ *
+ * DOES NOT SUPPORT NEGATIVE NUMBER like -1 or -2
+ */
+export function rangeStringToNumbers(rangeString: string): number[] {
+  const result: number[] = []
+  for (const part of rangeString.split(',')) {
+    if (!part) {
+      continue
+    }
+    const dashIdx = part.indexOf('-')
+    if (dashIdx > -1) {
+      const start = +part.slice(0, dashIdx)
+      const end = +part.slice(dashIdx + 1)
+      const min = Math.min(start, end)
+      const max = Math.max(start, end)
+      for (let i = min; i <= max; i++) {
+        result.push(i)
       }
-      return []
-    })
+    } else {
+      result.push(+part)
+    }
+  }
+  return result
 }
 
-function convertPlural(originalStr: string, configs: string, num: number): string {
+export function convertPlural(originalStr: string, configs: string, num: number): string {
   const ret = (str: string): string => str.replace(/@/g, `${num}`)
 
   // ['1=one test', '2-3=@ tests', '*=@ testss']
@@ -59,7 +69,7 @@ export const varRegex = /\{([^{}]+)\}(?!\()/g
 export const pluralRegex = /\{(\w+)\}\(([^()]+)\)/g
 
 /**
- * display message, support plural
+ * display message, support plural (DOES NOT SUPPORT NEGATIVE NUMBER like -1 or -2)
  * @param message message object
  * @param path object path, support nest and []
  * @param variable message variables, match `{key}` in message

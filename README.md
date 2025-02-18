@@ -169,6 +169,7 @@ t('var', { variable: 'text' }) // show text
 
 - case: support number (seprated by `,`) / range (seprated by `-`) / `*` (fallback cases)
 - text: plural text, use `@` to show matched variable
+- DOES NOT SUPPORT NEGATIVE NUMBER like -1 or -2
 
 e.g.
 ```ts
